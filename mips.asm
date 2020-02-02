@@ -21,7 +21,7 @@ syscall
 
 li $v0, 5 # scanf balance
 syscall 
-move $t3, $v0
+move $t3, $v0 # $t3 = balance, dynamic. changes on every bet.
 
 la $a0, enterhouseedge
 li $v0, 4 # "Enter house edge (%):"
@@ -37,8 +37,8 @@ syscall
 
 li $v0, 5 # scanf bet size
 syscall 
-move $t4, $v0
-
+move $t4, $v0 # $t4 = bet size, dynamic. gets multiplied by 2 if previous bet is a lose.
+move $t5, $t4 # $t5 = initial bet size, static.
 
 bgt $a2, $a0, IfBetSizeGreater # If bet size is greater, jump to IfBetSizeGreater
 
@@ -72,6 +72,7 @@ li $v0, 1
 syscall
 la $a0, newLine
 li $v0, 4 # "\n"
+move $t4, $t5 # dynamic bet size is equal to initial bet size, because of martingale.
 syscall
 j loop
 
@@ -83,17 +84,18 @@ syscall
 la $a0, balance
 li $v0, 4 # balance:
 syscall
-sub $t3, $t3, $t4 # substract winned amount to the balance
+sub $t3, $t3, $t4 # subtract winned amount to the balance
 move $a0, $t3
 li $v0, 1
 syscall
 la $a0, newLine
 li $v0, 4 # "\n"
 syscall
+mul $t4, $t4, 2 # t4 = t4 * 2
 bge $t4, $t3, InsufficientBalance # If balance is insufficient, stop.
 j loop
 
-li $v0, 10
+li $v0, 10 # exit
 syscall
 
 IfBetSizeGreater:
