@@ -1,4 +1,4 @@
-import random
+import secrets
 import matplotlib.pyplot as plt
 
 print('### Martingale vs House Edge Game ###')
@@ -19,7 +19,7 @@ winCount=0
 loseCount=0
 
 while balance > 0 and betSize <=balance and target >= balance: # Play while balance is more than zero, and the bet size is less than balance, and the target is more than or equal to the balance.
-    randNumber=random.randint(0,9999) # from 0 to 9999, in a total of 10,000 possibilities...
+    randNumber=secrets.SystemRandom().randint(0, 9999) # from 0 to 9999, in a total of 10,000 possibilities...
     if randNumber<5000-(5000*(edge/100)): # if the random number is less than 5000-(5000*(edge/100)):
         balance+=betSize # we win! add the betSize to the balance...
         betSize=minBet # and set the betSize to the minBet.
@@ -32,7 +32,6 @@ while balance > 0 and betSize <=balance and target >= balance: # Play while bala
     AmountOfBets+=1
 print('Ending balance: ' + str(balance))
 print('Amount of bets: ' + str(AmountOfBets))
-print('Highest bet (last bet): ' + str(betSize/2))
 print('Total number of wins: ' + str(winCount))
 print('Total number of losses: ' + str(loseCount))
 if loseCount > 0:
